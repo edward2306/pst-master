@@ -57,7 +57,7 @@ func (r *lxdRepo) Lxds() ([]models.LXD, error) {
 }
 
 func (r *lxdRepo) Create(u models.LXD) (models.LXD, error) {
-	stmt, err := r.DB.Prepare("insert lxd set name=?, ip=?, created_at=?, updated_at=?")
+	stmt, err := r.DB.Prepare("insert into lxds set name=?, ip=?, created_at=?, updated_at=?")
 	if err != nil {
 		log.Fatalln(err)
 	}
