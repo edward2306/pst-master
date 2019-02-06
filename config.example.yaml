@@ -1,0 +1,11 @@
+APP_NAME: Go-Rest
+PORT: 8000
+HOST: localhost
+
+DB_DRIVER: postgres
+DB_HOST: 127.0.0.1
+DB_PORT: 5432
+DB_NAME: goRestAPI
+DB_PASSWORD: 
+DB_USERNAME: postgres
+DB_POSTGRES_SSL_MODE: disable
