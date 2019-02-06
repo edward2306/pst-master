@@ -1,6 +1,12 @@
 package database
 
-func Migrate() (err error) {
+import (
+	"github.com/jinzhu/gorm"
+	"github.com/pisatoo/pst-master/models"
+)
 
-	return nil
+func Migrate(db *gorm.DB) (err error) {
+	db.AutoMigrate(models.LXD{})
+
+	return
 }
