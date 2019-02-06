@@ -57,7 +57,7 @@ func (r *lxdRepo) Lxds() ([]models.LXD, error) {
 }
 
 func (r *lxdRepo) Create(u models.LXD) (models.LXD, error) {
-	stmt, err := r.DB.Prepare("insert lxd set name=?, ip=?, created_at=?, updated_at=?")
+	stmt, err := r.DB.Prepare("INSERT INTO lxd(name,ip,created_at,updated_at) VALUES($1,$2,$3,$4)")
 	if err != nil {
 		log.Fatalln(err)
 	}
@@ -76,7 +76,7 @@ func (r *lxdRepo) Create(u models.LXD) (models.LXD, error) {
 }
 
 func (r *lxdRepo) Update(i int, u models.LXD) (models.LXD, error) {
-	stmt, err := r.DB.Prepare("update lxd set name=?, ip=?, updated_at=? where id=?")
+	stmt, err := r.DB.Prepare("INSERT INTO lxd(name,ip,created_at,updated_at) VALUES($1,$2,$3,$4)")
 
 	if err != nil {
 		log.Fatalln(err)
