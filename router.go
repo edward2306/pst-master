@@ -1,14 +1,14 @@
 package main
 
 import (
-	"database/sql"
+	"github.com/jinzhu/gorm"
 
 	"github.com/gorilla/mux"
 	"github.com/pisatoo/pst-master/controllers"
 	"github.com/pisatoo/pst-master/repositories"
 )
 
-func LoadRouter(db *sql.DB) (r *mux.Router) {
+func LoadRouter(db *gorm.DB) (r *mux.Router) {
 	lxdRepo := repositories.NewLxdRepo(db)
 	lxdController := controllers.NewLxdController(lxdRepo)
 

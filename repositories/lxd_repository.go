@@ -1,107 +1,64 @@
 package repositories
 
 import (
-	"database/sql"
-	"log"
+	"github.com/jinzhu/gorm"
 
 	"github.com/pisatoo/pst-master/models"
 )
 
 type lxdRepo struct {
-	DB *sql.DB
+	DB *gorm.DB
 }
 
 type LxdRepository interface {
 	Lxd(id int) (models.LXD, error)
 	Lxds() ([]models.LXD, error)
-	Create(u models.LXD) (models.LXD, error)
-	Update(id int, u models.LXD) (models.LXD, error)
+	Create(l models.LXD) (models.LXD, error)
+	Update(id int, l models.LXD) (models.LXD, error)
 	Delete(id int) (bool, error)
 }
 
-func NewLxdRepo(DB *sql.DB) LxdRepository {
+func NewLxdRepo(DB *gorm.DB) LxdRepository {
 	return &lxdRepo{DB}
 }
 
 func (r *lxdRepo) Lxd(id int) (models.LXD, error) {
-	var u models.LXD
+	var l models.LXD
 
-	err := r.DB.QueryRow("select * from lxd where id=?", id).
-		Scan(&u.ID, &u.Name, &u.IP, &u.CreatedAt, &u.UpdatedAt)
+	r.DB.Find(&l, id)
 
-	return u, err
+	return l, nil
 }
 
 func (r *lxdRepo) Lxds() ([]models.LXD, error) {
 	var lxds []models.LXD
 
-	rows, err := r.DB.Query(`select * from lxd`)
-	if err != nil {
-		log.Fatalln(err)
-	}
-
-	defer rows.Close()
-
-	for rows.Next() {
-		var u models.LXD
-		err := rows.Scan(&u.ID, &u.Name, &u.IP, &u.CreatedAt, &u.UpdatedAt)
-
-		if err != nil {
-			log.Fatalln(err)
-		}
-
-		lxds = append(lxds, u)
-	}
+	r.DB.Find(&lxds)
 
 	return lxds, nil
 }
 
-func (r *lxdRepo) Create(u models.LXD) (models.LXD, error) {
-	stmt, err := r.DB.Prepare("INSERT INTO lxd(name,ip,created_at,updated_at) VALUES($1,$2,$3,$4)")
-	if err != nil {
-		log.Fatalln(err)
-	}
+func (r *lxdRepo) Create(l models.LXD) (models.LXD, error) {
+	r.DB.Create(&l)
 
-	res, err := stmt.Exec(u.Name, u.IP, u.CreatedAt, u.UpdatedAt)
-	if err != nil {
-		log.Fatalln(err)
-	}
-
-	id, err := res.LastInsertId()
-	idInt := int(id)
-
-	lxd, _ := r.Lxd(idInt)
-
-	return lxd, err
+	return l, nil
 }
 
-func (r *lxdRepo) Update(i int, u models.LXD) (models.LXD, error) {
-	stmt, err := r.DB.Prepare("INSERT INTO lxd(name,ip,created_at,updated_at) VALUES($1,$2,$3,$4)")
+func (r *lxdRepo) Update(id int, l models.LXD) (models.LXD, error) {
+	var lxd models.LXD
+	r.DB.First(&lxd, id)
 
-	if err != nil {
-		log.Fatalln(err)
-	}
+	r.DB.Model(&lxd).Select([]string{"name", "updated_at"}).
+		Updates(map[string]interface{}{"name": l.Name, "updated_at": l.UpdatedAt})
 
-	_, err = stmt.Exec(u.Name, u.IP, u.UpdatedAt, i)
-	if err != nil {
-		log.Fatalln(err)
-	}
-
-	lxd, _ := r.Lxd(i)
-
-	return lxd, err
+	return lxd, nil
 }
 
 func (r *lxdRepo) Delete(id int) (bool, error) {
-	stmt, err := r.DB.Prepare("delete from lxd where id=?")
-	if err != nil {
-		log.Fatalln(err)
-	}
+	var lxd models.LXD
+	r.DB.First(&lxd, id)
 
-	_, err = stmt.Exec(id)
-	if err != nil {
-		log.Fatalln(err)
-	}
+	r.DB.Delete(&lxd)
 
 	return true, nil
 }

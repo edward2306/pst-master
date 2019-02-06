@@ -1,10 +1,11 @@
 package main
 
 import (
-	"database/sql"
 	"log"
 	"net/http"
 	"os"
+
+	"github.com/jinzhu/gorm"
 
 	_ "github.com/lib/pq"
 	"github.com/pisatoo/pst-master/database"
@@ -20,7 +21,7 @@ func loadConfig() (err error) {
 	return err
 }
 
-func runServer(db *sql.DB) {
+func runServer(db *gorm.DB) {
 	r := LoadRouter(db)
 
 	log.Println("Server run on " + getAddress())
@@ -52,13 +53,19 @@ func main() {
 				return err
 			},
 		},
+		{
+			Name:  "start",
+			Usage: "Start REST API Server",
+			Action: func(c *cli.Context) error {
+				runServer(db)
+				return nil
+			},
+		},
 	}
 
 	if err := cliApp.Run(os.Args); err != nil {
 		log.Fatal(err)
 	}
-
-	// runServer(db)
 
 	defer db.Close()
 }
