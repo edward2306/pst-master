@@ -23,25 +23,25 @@ func NewLxdRepo(DB *gorm.DB) LxdRepository {
 }
 
 func (r *lxdRepo) Lxd(id int) models.LXD {
-	var l models.LXD
+	var d models.LXD
 
 	r.DB.Find(&l, id)
 
-	return l
+	return d
 }
 
 func (r *lxdRepo) Lxds() []models.LXD {
-	var lxds []models.LXD
+	var dd []models.LXD
 
-	r.DB.Find(&lxds)
+	r.DB.Find(&dd)
 
-	return lxds
+	return dd
 }
 
 func (r *lxdRepo) Create(l models.LXD) models.LXD {
-	r.DB.Create(&l)
+	r.DB.Create(&d)
 
-	return l
+	return d
 }
 
 func (r *lxdRepo) Update(id int, l models.LXD) models.LXD {
