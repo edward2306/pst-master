@@ -2,7 +2,6 @@ package repositories
 
 import (
 	"github.com/jinzhu/gorm"
-
 	"github.com/pisatoo/pst-master/models"
 )
 
