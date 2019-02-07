@@ -21,3 +21,17 @@ func LoadRouter(db *gorm.DB) (r *mux.Router) {
 
 	return
 }
+
+func newRouter(db *gorm.DB) (r *mux.Router) {
+	lxcRepo := repositories.NewLxcRepo(db)
+	lxcController := controllers.NewLxcController(lxcRepo)
+
+	r = mux.NewRouter()
+	r.HandleFunc("/lxcs", lxcController.Lxcs).Methods("GET")
+	r.HandleFunc("/lxcs", lxcController.Create).Methods("POST")
+	r.HandleFunc("/lxcs/{id}", lxcController.Lxc).Methods("GET")
+	r.HandleFunc("/lxcs/{id}", lxcController.Update).Methods("PATCH")
+	r.HandleFunc("/lxcs/{id}", lxcController.Delete).Methods("DELETE")
+
+	return
+}
