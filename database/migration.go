@@ -7,6 +7,7 @@ import (
 
 func Migrate(db *gorm.DB) (err error) {
 	db.AutoMigrate(models.LXD{})
+	db.AutoMigrate(models.LXC{})
 
 	return
 }
