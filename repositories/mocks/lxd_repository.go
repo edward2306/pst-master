@@ -11,7 +11,7 @@ type LxdRepository struct {
 }
 
 // Create provides a mock function with given fields: l
-func (_m *LxdRepository) Create(l models.LXD) (models.LXD, error) {
+func (_m *LxdRepository) Create(l models.LXD) models.LXD {
 	ret := _m.Called(l)
 
 	var r0 models.LXD
@@ -21,18 +21,11 @@ func (_m *LxdRepository) Create(l models.LXD) (models.LXD, error) {
 		r0 = ret.Get(0).(models.LXD)
 	}
 
-	var r1 error
-	if rf, ok := ret.Get(1).(func(models.LXD) error); ok {
-		r1 = rf(l)
-	} else {
-		r1 = ret.Error(1)
-	}
-
-	return r0, r1
+	return r0
 }
 
 // Delete provides a mock function with given fields: id
-func (_m *LxdRepository) Delete(id int) (bool, error) {
+func (_m *LxdRepository) Delete(id int) bool {
 	ret := _m.Called(id)
 
 	var r0 bool
@@ -42,18 +35,11 @@ func (_m *LxdRepository) Delete(id int) (bool, error) {
 		r0 = ret.Get(0).(bool)
 	}
 
-	var r1 error
-	if rf, ok := ret.Get(1).(func(int) error); ok {
-		r1 = rf(id)
-	} else {
-		r1 = ret.Error(1)
-	}
-
-	return r0, r1
+	return r0
 }
 
 // Lxd provides a mock function with given fields: id
-func (_m *LxdRepository) Lxd(id int) (models.LXD, error) {
+func (_m *LxdRepository) Lxd(id int) models.LXD {
 	ret := _m.Called(id)
 
 	var r0 models.LXD
@@ -63,18 +49,11 @@ func (_m *LxdRepository) Lxd(id int) (models.LXD, error) {
 		r0 = ret.Get(0).(models.LXD)
 	}
 
-	var r1 error
-	if rf, ok := ret.Get(1).(func(int) error); ok {
-		r1 = rf(id)
-	} else {
-		r1 = ret.Error(1)
-	}
-
-	return r0, r1
+	return r0
 }
 
 // Lxds provides a mock function with given fields:
-func (_m *LxdRepository) Lxds() ([]models.LXD, error) {
+func (_m *LxdRepository) Lxds() []models.LXD {
 	ret := _m.Called()
 
 	var r0 []models.LXD
@@ -86,18 +65,11 @@ func (_m *LxdRepository) Lxds() ([]models.LXD, error) {
 		}
 	}
 
-	var r1 error
-	if rf, ok := ret.Get(1).(func() error); ok {
-		r1 = rf()
-	} else {
-		r1 = ret.Error(1)
-	}
-
-	return r0, r1
+	return r0
 }
 
 // Update provides a mock function with given fields: id, l
-func (_m *LxdRepository) Update(id int, l models.LXD) (models.LXD, error) {
+func (_m *LxdRepository) Update(id int, l models.LXD) models.LXD {
 	ret := _m.Called(id, l)
 
 	var r0 models.LXD
@@ -107,12 +79,5 @@ func (_m *LxdRepository) Update(id int, l models.LXD) (models.LXD, error) {
 		r0 = ret.Get(0).(models.LXD)
 	}
 
-	var r1 error
-	if rf, ok := ret.Get(1).(func(int, models.LXD) error); ok {
-		r1 = rf(id, l)
-	} else {
-		r1 = ret.Error(1)
-	}
-
-	return r0, r1
+	return r0
 }

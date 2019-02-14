@@ -21,19 +21,19 @@ import (
 	"github.com/pisatoo/pst-master/models"
 )
 
-func TestLxds(t *testing.T) {
-	ll := make([]models.LXD, 1)
-	mockLxdRepo := new(mocks.LxdRepository)
-	mockLxdRepo.On("Lxds").Return(ll)
+func TestLxcs(t *testing.T) {
+	ll := make([]models.LXC, 1)
+	mockLxcRepo := new(mocks.LxcRepository)
+	mockLxcRepo.On("Lxcs").Return(ll)
 
-	lc := controllers.NewLxdController(mockLxdRepo)
+	lc := controllers.NewLxcController(mockLxcRepo)
 
-	req, err := http.NewRequest("GET", "/lxds", nil)
+	req, err := http.NewRequest("GET", "/Lxcs", nil)
 	assert.NoError(t, err)
 
 	rr := httptest.NewRecorder()
 	router := mux.NewRouter()
-	router.HandleFunc("/lxds", lc.Lxds)
+	router.HandleFunc("/Lxcs", lc.Lxcs)
 	router.ServeHTTP(rr, req)
 
 	if status := rr.Code; status != http.StatusOK {
@@ -41,32 +41,34 @@ func TestLxds(t *testing.T) {
 	}
 }
 
-func TestLxd(t *testing.T) {
+func TestLxc(t *testing.T) {
 	now := time.Now()
 
-	l := models.LXD{
-		ID:        0,
+	l := models.LXC{
+		ID:        1,
 		Name:      "amendo",
 		IP:        "192.168.34.34",
+		OsVersion: "Ubuntu 18.04",
+		IdLXD:     1,
 		CreatedAt: now,
 		UpdatedAt: now,
 	}
 
 	id := int(l.ID)
 
-	mockLxdRepo := new(mocks.LxdRepository)
-	mockLxdRepo.On("Lxd", id).Return(l)
+	mockLxcRepo := new(mocks.LxcRepository)
+	mockLxcRepo.On("Lxc", id).Return(l)
 
-	lc := controllers.NewLxdController(mockLxdRepo)
+	lc := controllers.NewLxcController(mockLxcRepo)
 
-	req, err := http.NewRequest("GET", "/lxds/"+strconv.Itoa(id), nil)
+	req, err := http.NewRequest("GET", "/Lxcs/"+strconv.Itoa(id), nil)
 	if err != nil {
 		t.Fatalf(err.Error())
 	}
 
 	rr := httptest.NewRecorder()
 	router := mux.NewRouter()
-	router.HandleFunc("/lxds/{id}", lc.Lxd)
+	router.HandleFunc("/Lxcs/{id}", lc.Lxc)
 	router.ServeHTTP(rr, req)
 
 	if status := rr.Code; status != http.StatusOK {
@@ -74,33 +76,36 @@ func TestLxd(t *testing.T) {
 	}
 }
 
-func TestCreate(t *testing.T) {
+func TestCreateLxc(t *testing.T) {
 	now := time.Now()
 
-	l := models.LXD{
+	l := models.LXC{
+		ID:        1,
 		Name:      "amendo",
 		IP:        "192.168.34.34",
+		OsVersion: "Ubuntu 18.04",
+		IdLXD:     1,
 		CreatedAt: now,
 		UpdatedAt: now,
 	}
 
-	tempLxd := l
-	tempLxd.ID = 1
+	tempLxc := l
+	tempLxc.ID = 1
 
-	mockLxdRepo := new(mocks.LxdRepository)
-	mockLxdRepo.On("Create", mock.AnythingOfType("models.LXD")).Return(l)
+	mockLxcRepo := new(mocks.LxcRepository)
+	mockLxcRepo.On("Create", mock.AnythingOfType("models.LXC")).Return(l)
 
-	lc := controllers.NewLxdController(mockLxdRepo)
+	lc := controllers.NewLxcController(mockLxcRepo)
 
-	payload, err := json.Marshal(tempLxd)
+	payload, err := json.Marshal(tempLxc)
 	assert.NoError(t, err)
 
-	req, err := http.NewRequest("POST", "/lxds", strings.NewReader(string(payload)))
+	req, err := http.NewRequest("POST", "/Lxcs", strings.NewReader(string(payload)))
 	assert.NoError(t, err)
 
 	rr := httptest.NewRecorder()
 	router := mux.NewRouter()
-	router.HandleFunc("/lxds", lc.Create)
+	router.HandleFunc("/Lxcs", lc.Create)
 	router.ServeHTTP(rr, req)
 
 	if status := rr.Code; status != http.StatusCreated {
@@ -108,33 +113,35 @@ func TestCreate(t *testing.T) {
 	}
 }
 
-func TestUpdate(t *testing.T) {
+func TestUpdateLxc(t *testing.T) {
 	now := time.Now()
 
-	l := models.LXD{
+	l := models.LXC{
 		ID:        1,
-		Name:      "amendo",
-		IP:        "192.168.34.34",
+		Name:      "Edward",
+		IP:        "192.168.34.184",
+		OsVersion: "Ubuntu 18.04",
+		IdLXD:     1,
 		CreatedAt: now,
 		UpdatedAt: now,
 	}
 
 	id := int(l.ID)
 
-	mockLxdRepo := new(mocks.LxdRepository)
-	mockLxdRepo.On("Update", id, mock.AnythingOfType("models.LXD")).Return(l)
+	mockLxcRepo := new(mocks.LxcRepository)
+	mockLxcRepo.On("Update", id, mock.AnythingOfType("models.LXC")).Return(l)
 
-	lc := controllers.NewLxdController(mockLxdRepo)
+	lc := controllers.NewLxcController(mockLxcRepo)
 
 	payload, err := json.Marshal(l)
 	assert.NoError(t, err)
 
-	req, err := http.NewRequest("PATCH", "/lxds/"+strconv.Itoa(id), strings.NewReader(string(payload)))
+	req, err := http.NewRequest("PATCH", "/Lxcs/"+strconv.Itoa(id), strings.NewReader(string(payload)))
 	assert.NoError(t, err)
 
 	rr := httptest.NewRecorder()
 	router := mux.NewRouter()
-	router.HandleFunc("/lxds/{id}", lc.Update)
+	router.HandleFunc("/Lxcs/{id}", lc.Update)
 	router.ServeHTTP(rr, req)
 
 	if status := rr.Code; status != http.StatusOK {
@@ -142,30 +149,32 @@ func TestUpdate(t *testing.T) {
 	}
 }
 
-func TestDetele(t *testing.T) {
+func TestDeteleLxc(t *testing.T) {
 	now := time.Now()
 
-	l := models.LXD{
+	l := models.LXC{
 		ID:        1,
 		Name:      "amendo",
 		IP:        "192.168.34.34",
+		OsVersion: "Ubuntu 18.04",
+		IdLXD:     1,
 		CreatedAt: now,
 		UpdatedAt: now,
 	}
 
 	id := int(l.ID)
 
-	mockLxdRepo := new(mocks.LxdRepository)
-	mockLxdRepo.On("Delete", id).Return(true)
+	mockLxcRepo := new(mocks.LxcRepository)
+	mockLxcRepo.On("Delete", id).Return(true)
 
-	lc := controllers.NewLxdController(mockLxdRepo)
+	lc := controllers.NewLxcController(mockLxcRepo)
 
-	req, err := http.NewRequest("DELETE", "/lxds/"+strconv.Itoa(id), nil)
+	req, err := http.NewRequest("DELETE", "/Lxcs/"+strconv.Itoa(id), nil)
 	assert.NoError(t, err)
 
 	rr := httptest.NewRecorder()
 	router := mux.NewRouter()
-	router.HandleFunc("/lxds/{id}", lc.Delete)
+	router.HandleFunc("/Lxcs/{id}", lc.Delete)
 	router.ServeHTTP(rr, req)
 
 	if status := rr.Code; status != http.StatusOK {
